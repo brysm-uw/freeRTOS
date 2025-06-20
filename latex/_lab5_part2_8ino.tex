@@ -1,0 +1,318 @@
+\doxysection{Lab5\+Part2.\+ino File Reference}
+\hypertarget{_lab5_part2_8ino}{}\label{_lab5_part2_8ino}\index{Lab5Part2.ino@{Lab5Part2.ino}}
+
+
+ESP32 application using Free\+RTOS with multiple tasks\+:  
+
+
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include $<$Wire.\+h$>$}\newline
+{\ttfamily \#include $<$Liquid\+Crystal\+\_\+\+I2\+C.\+h$>$}\newline
+{\ttfamily \#include $<$freertos/semphr.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structlcd__message__t}{lcd\+\_\+message\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Structure representing a two-\/line LCD message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_lab5_part2_8ino_adfd6a3f8aa3f1c719f648de4e3701fba}{LIGHT\+\_\+\+SENSOR\+\_\+\+PIN}}~4
+\begin{DoxyCompactList}\small\item\em Analog input pin for light sensor. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{_lab5_part2_8ino_ab4553be4db9860d940f81d7447173b2f}{LED\+\_\+\+PIN}}~5
+\begin{DoxyCompactList}\small\item\em Digital output pin for LED alarm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{_lab5_part2_8ino_a526d580d324bce60a3e964066fae77e3}{SDA\+\_\+\+PIN}}~8
+\begin{DoxyCompactList}\small\item\em I2C SDA pin for LCD. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{_lab5_part2_8ino_a06c967e78bcedcee909a70764f879433}{SCL\+\_\+\+PIN}}~9
+\begin{DoxyCompactList}\small\item\em I2C SCL pin for LCD. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{_lab5_part2_8ino_aab25150c611eb3bcd9efa6945d1ef7f7}{LCD\+\_\+\+ADDRESS}}~0x27
+\begin{DoxyCompactList}\small\item\em I2C address for the LCD display. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Liquid\+Crystal\+\_\+\+I2C \mbox{\hyperlink{_lab5_part2_8ino_acd9c0340123358ac852651af80625f1b}{lcd}} (\mbox{\hyperlink{_lab5_part2_8ino_aab25150c611eb3bcd9efa6945d1ef7f7}{LCD\+\_\+\+ADDRESS}}, 16, 2)
+\begin{DoxyCompactList}\small\item\em 16x2 I2C LCD display instance. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_lab5_part2_8ino_abc0a5e2b9db7d26f855df2e334fd4bda}{lcd\+Task}} (void \texorpdfstring{$\ast$}{*}arg)
+\begin{DoxyCompactList}\small\item\em Task that listens for LCD messages and updates the display. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_lab5_part2_8ino_ab8e13e31e625fec5c646fd7afd4b8c27}{light\+Detector\+Task}} (void \texorpdfstring{$\ast$}{*}arg)
+\begin{DoxyCompactList}\small\item\em Task that reads light sensor and computes simple moving average. Signals other tasks using semaphores. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_lab5_part2_8ino_a68107b1a4c0331f5451fe461d2fee990}{light\+Display\+Task}} (void \texorpdfstring{$\ast$}{*}arg)
+\begin{DoxyCompactList}\small\item\em Task that displays the latest light and SMA values if changed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_lab5_part2_8ino_ab6c85cbf5fe13fe92bae068100b2e4e9}{alarm\+Task}} (void \texorpdfstring{$\ast$}{*}arg)
+\begin{DoxyCompactList}\small\item\em Task that monitors the SMA value and triggers an LED alarm if it is out of expected range. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_lab5_part2_8ino_a2a62b385fe47d5acab419490e81f9f24}{prime\+Task}} (void \texorpdfstring{$\ast$}{*}arg)
+\begin{DoxyCompactList}\small\item\em Task that computes prime numbers up to 5000. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_lab5_part2_8ino_a4fc01d736fe50cf5b977f755b675f11d}{setup}} ()
+\begin{DoxyCompactList}\small\item\em Initializes peripherals, semaphores, queue, and creates all tasks. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_lab5_part2_8ino_afe461d27b9c48d5921c00d521181f12f}{loop}} ()
+\begin{DoxyCompactList}\small\item\em Main loop function (unused in Free\+RTOS application). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Semaphore\+Handle\+\_\+t \mbox{\hyperlink{_lab5_part2_8ino_a6a7117c54006a4f9febe244e99ceefd0}{display\+Semaphore}}
+\begin{DoxyCompactList}\small\item\em Semaphore used to trigger LCD display updates. \end{DoxyCompactList}\item 
+Semaphore\+Handle\+\_\+t \mbox{\hyperlink{_lab5_part2_8ino_abcb30d651c993f826e1e0c23405b1154}{alarm\+Semaphore}}
+\begin{DoxyCompactList}\small\item\em Semaphore used to trigger alarm checks. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \mbox{\hyperlink{_lab5_part2_8ino_a161df8b394e0e3c83a1108261bcee66e}{lcd\+Queue}}
+\begin{DoxyCompactList}\small\item\em Queue for passing messages to the LCD task. \end{DoxyCompactList}\item 
+volatile int \mbox{\hyperlink{_lab5_part2_8ino_ac9e32a0f7b89baa001e7d583ae644f87}{light\+Level}} = 0
+\begin{DoxyCompactList}\small\item\em Current light sensor reading. \end{DoxyCompactList}\item 
+volatile int \mbox{\hyperlink{_lab5_part2_8ino_ac8bd5822b6ae3b1930b88b46b0c347e8}{sma\+Value}} = 0
+\begin{DoxyCompactList}\small\item\em Current simple moving average of light readings. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_lab5_part2_8ino_a1295a95596cb62bd2e570bcb3541c719}{light\+History}} \mbox{[}5\mbox{]} = \{0\}
+\begin{DoxyCompactList}\small\item\em History of last 5 light sensor readings. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_lab5_part2_8ino_a2f4a3110bc54e5433d4c322d7dabe76e}{history\+Index}} = 0
+\begin{DoxyCompactList}\small\item\em Index for circular light history buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+ESP32 application using Free\+RTOS with multiple tasks\+: 
+
+
+\begin{DoxyItemize}
+\item Light detection
+\item LCD display updates
+\item Alarm triggering
+\item Prime number calculation
+\end{DoxyItemize}
+
+Uses I2C LCD, semaphores for synchronization, and a task queue for LCD messages. 
+
+\label{doc-define-members}
+\Hypertarget{_lab5_part2_8ino_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{_lab5_part2_8ino_aab25150c611eb3bcd9efa6945d1ef7f7}\index{Lab5Part2.ino@{Lab5Part2.ino}!LCD\_ADDRESS@{LCD\_ADDRESS}}
+\index{LCD\_ADDRESS@{LCD\_ADDRESS}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{LCD\_ADDRESS}{LCD\_ADDRESS}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_aab25150c611eb3bcd9efa6945d1ef7f7} 
+\#define LCD\+\_\+\+ADDRESS~0x27}
+
+
+
+I2C address for the LCD display. 
+
+\Hypertarget{_lab5_part2_8ino_ab4553be4db9860d940f81d7447173b2f}\index{Lab5Part2.ino@{Lab5Part2.ino}!LED\_PIN@{LED\_PIN}}
+\index{LED\_PIN@{LED\_PIN}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{LED\_PIN}{LED\_PIN}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_ab4553be4db9860d940f81d7447173b2f} 
+\#define LED\+\_\+\+PIN~5}
+
+
+
+Digital output pin for LED alarm. 
+
+\Hypertarget{_lab5_part2_8ino_adfd6a3f8aa3f1c719f648de4e3701fba}\index{Lab5Part2.ino@{Lab5Part2.ino}!LIGHT\_SENSOR\_PIN@{LIGHT\_SENSOR\_PIN}}
+\index{LIGHT\_SENSOR\_PIN@{LIGHT\_SENSOR\_PIN}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{LIGHT\_SENSOR\_PIN}{LIGHT\_SENSOR\_PIN}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_adfd6a3f8aa3f1c719f648de4e3701fba} 
+\#define LIGHT\+\_\+\+SENSOR\+\_\+\+PIN~4}
+
+
+
+Analog input pin for light sensor. 
+
+\Hypertarget{_lab5_part2_8ino_a06c967e78bcedcee909a70764f879433}\index{Lab5Part2.ino@{Lab5Part2.ino}!SCL\_PIN@{SCL\_PIN}}
+\index{SCL\_PIN@{SCL\_PIN}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{SCL\_PIN}{SCL\_PIN}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a06c967e78bcedcee909a70764f879433} 
+\#define SCL\+\_\+\+PIN~9}
+
+
+
+I2C SCL pin for LCD. 
+
+\Hypertarget{_lab5_part2_8ino_a526d580d324bce60a3e964066fae77e3}\index{Lab5Part2.ino@{Lab5Part2.ino}!SDA\_PIN@{SDA\_PIN}}
+\index{SDA\_PIN@{SDA\_PIN}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{SDA\_PIN}{SDA\_PIN}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a526d580d324bce60a3e964066fae77e3} 
+\#define SDA\+\_\+\+PIN~8}
+
+
+
+I2C SDA pin for LCD. 
+
+
+
+\label{doc-func-members}
+\Hypertarget{_lab5_part2_8ino_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{_lab5_part2_8ino_ab6c85cbf5fe13fe92bae068100b2e4e9}\index{Lab5Part2.ino@{Lab5Part2.ino}!alarmTask@{alarmTask}}
+\index{alarmTask@{alarmTask}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{alarmTask()}{alarmTask()}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_ab6c85cbf5fe13fe92bae068100b2e4e9} 
+void alarm\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{}\end{DoxyParamCaption})}
+
+
+
+Task that monitors the SMA value and triggers an LED alarm if it is out of expected range. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & Unused parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_lab5_part2_8ino_acd9c0340123358ac852651af80625f1b}\index{Lab5Part2.ino@{Lab5Part2.ino}!lcd@{lcd}}
+\index{lcd@{lcd}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{lcd()}{lcd()}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_acd9c0340123358ac852651af80625f1b} 
+Liquid\+Crystal\+\_\+\+I2C lcd (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_lab5_part2_8ino_aab25150c611eb3bcd9efa6945d1ef7f7}{LCD\+\_\+\+ADDRESS}}}]{}{, }\item[{16}]{}{, }\item[{2}]{}{}\end{DoxyParamCaption})}
+
+
+
+16x2 I2C LCD display instance. 
+
+\Hypertarget{_lab5_part2_8ino_abc0a5e2b9db7d26f855df2e334fd4bda}\index{Lab5Part2.ino@{Lab5Part2.ino}!lcdTask@{lcdTask}}
+\index{lcdTask@{lcdTask}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{lcdTask()}{lcdTask()}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_abc0a5e2b9db7d26f855df2e334fd4bda} 
+void lcd\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{}\end{DoxyParamCaption})}
+
+
+
+Task that listens for LCD messages and updates the display. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & Unused parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_lab5_part2_8ino_ab8e13e31e625fec5c646fd7afd4b8c27}\index{Lab5Part2.ino@{Lab5Part2.ino}!lightDetectorTask@{lightDetectorTask}}
+\index{lightDetectorTask@{lightDetectorTask}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{lightDetectorTask()}{lightDetectorTask()}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_ab8e13e31e625fec5c646fd7afd4b8c27} 
+void light\+Detector\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{}\end{DoxyParamCaption})}
+
+
+
+Task that reads light sensor and computes simple moving average. Signals other tasks using semaphores. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & Unused parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_lab5_part2_8ino_a68107b1a4c0331f5451fe461d2fee990}\index{Lab5Part2.ino@{Lab5Part2.ino}!lightDisplayTask@{lightDisplayTask}}
+\index{lightDisplayTask@{lightDisplayTask}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{lightDisplayTask()}{lightDisplayTask()}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a68107b1a4c0331f5451fe461d2fee990} 
+void light\+Display\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{}\end{DoxyParamCaption})}
+
+
+
+Task that displays the latest light and SMA values if changed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & Unused parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_lab5_part2_8ino_afe461d27b9c48d5921c00d521181f12f}\index{Lab5Part2.ino@{Lab5Part2.ino}!loop@{loop}}
+\index{loop@{loop}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{loop()}{loop()}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_afe461d27b9c48d5921c00d521181f12f} 
+void loop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Main loop function (unused in Free\+RTOS application). 
+
+\Hypertarget{_lab5_part2_8ino_a2a62b385fe47d5acab419490e81f9f24}\index{Lab5Part2.ino@{Lab5Part2.ino}!primeTask@{primeTask}}
+\index{primeTask@{primeTask}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{primeTask()}{primeTask()}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a2a62b385fe47d5acab419490e81f9f24} 
+void prime\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{}\end{DoxyParamCaption})}
+
+
+
+Task that computes prime numbers up to 5000. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & Unused parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_lab5_part2_8ino_a4fc01d736fe50cf5b977f755b675f11d}\index{Lab5Part2.ino@{Lab5Part2.ino}!setup@{setup}}
+\index{setup@{setup}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{setup()}{setup()}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a4fc01d736fe50cf5b977f755b675f11d} 
+void setup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes peripherals, semaphores, queue, and creates all tasks. 
+
+
+
+\label{doc-var-members}
+\Hypertarget{_lab5_part2_8ino_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{_lab5_part2_8ino_abcb30d651c993f826e1e0c23405b1154}\index{Lab5Part2.ino@{Lab5Part2.ino}!alarmSemaphore@{alarmSemaphore}}
+\index{alarmSemaphore@{alarmSemaphore}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{alarmSemaphore}{alarmSemaphore}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_abcb30d651c993f826e1e0c23405b1154} 
+Semaphore\+Handle\+\_\+t alarm\+Semaphore}
+
+
+
+Semaphore used to trigger alarm checks. 
+
+\Hypertarget{_lab5_part2_8ino_a6a7117c54006a4f9febe244e99ceefd0}\index{Lab5Part2.ino@{Lab5Part2.ino}!displaySemaphore@{displaySemaphore}}
+\index{displaySemaphore@{displaySemaphore}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{displaySemaphore}{displaySemaphore}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a6a7117c54006a4f9febe244e99ceefd0} 
+Semaphore\+Handle\+\_\+t display\+Semaphore}
+
+
+
+Semaphore used to trigger LCD display updates. 
+
+\Hypertarget{_lab5_part2_8ino_a2f4a3110bc54e5433d4c322d7dabe76e}\index{Lab5Part2.ino@{Lab5Part2.ino}!historyIndex@{historyIndex}}
+\index{historyIndex@{historyIndex}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{historyIndex}{historyIndex}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a2f4a3110bc54e5433d4c322d7dabe76e} 
+int history\+Index = 0}
+
+
+
+Index for circular light history buffer. 
+
+\Hypertarget{_lab5_part2_8ino_a161df8b394e0e3c83a1108261bcee66e}\index{Lab5Part2.ino@{Lab5Part2.ino}!lcdQueue@{lcdQueue}}
+\index{lcdQueue@{lcdQueue}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{lcdQueue}{lcdQueue}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a161df8b394e0e3c83a1108261bcee66e} 
+Queue\+Handle\+\_\+t lcd\+Queue}
+
+
+
+Queue for passing messages to the LCD task. 
+
+\Hypertarget{_lab5_part2_8ino_a1295a95596cb62bd2e570bcb3541c719}\index{Lab5Part2.ino@{Lab5Part2.ino}!lightHistory@{lightHistory}}
+\index{lightHistory@{lightHistory}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{lightHistory}{lightHistory}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_a1295a95596cb62bd2e570bcb3541c719} 
+int light\+History\mbox{[}5\mbox{]} = \{0\}}
+
+
+
+History of last 5 light sensor readings. 
+
+\Hypertarget{_lab5_part2_8ino_ac9e32a0f7b89baa001e7d583ae644f87}\index{Lab5Part2.ino@{Lab5Part2.ino}!lightLevel@{lightLevel}}
+\index{lightLevel@{lightLevel}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{lightLevel}{lightLevel}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_ac9e32a0f7b89baa001e7d583ae644f87} 
+volatile int light\+Level = 0}
+
+
+
+Current light sensor reading. 
+
+\Hypertarget{_lab5_part2_8ino_ac8bd5822b6ae3b1930b88b46b0c347e8}\index{Lab5Part2.ino@{Lab5Part2.ino}!smaValue@{smaValue}}
+\index{smaValue@{smaValue}!Lab5Part2.ino@{Lab5Part2.ino}}
+\doxysubsubsection{\texorpdfstring{smaValue}{smaValue}}
+{\footnotesize\ttfamily \label{_lab5_part2_8ino_ac8bd5822b6ae3b1930b88b46b0c347e8} 
+volatile int sma\+Value = 0}
+
+
+
+Current simple moving average of light readings. 
+
